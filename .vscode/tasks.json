@@ -10,10 +10,7 @@
             "presentation": {
                 "reveal": "always"
             },
-            "group": {
-                "kind": "build",
-                "isDefault": true
-            }
+            "group": "build"
         },
         {
             "label": "Run",
@@ -24,6 +21,13 @@
                 "kind": "test",
                 "isDefault": true
             }
+        },
+        {
+            "label": "Clean",
+            "type": "shell",
+            "command": "make clean",
+            "problemMatcher": [],
+            "group": "build"
         }
     ]
 }
