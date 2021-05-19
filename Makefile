@@ -1,22 +1,25 @@
 CC = g++
-CCFLAGS = -g
+CXXFLAGS = -std=c++11 -g
 SRCDIR = src/
-OBJS = game.o map.o
+OBJS = game.o map.o snake.o
 TARGET = snake_game
 
 all: $(TARGET)
 
 $(TARGET): $(OBJS)
-	$(CC) $(CCFLAGS) -o $@ game.o map.o -lncurses
+	$(CC) $(CFLAGS) -o $@ $(OBJS) -lncursesw
 
 game.o: game.cpp
-	$(CC) $(CCFLAGS) -c game.cpp -lncurses
+	$(CC) $(CXXFLAGS) -c game.cpp
 
 map.o: map.cpp
-	$(CC) $(CCFLAGS) -c map.cpp
+	$(CC) $(CXXFLAGS) -c map.cpp
+
+snake.o: snake.cpp
+	$(CC) $(CXXFLAGS) -c snake.cpp
 
 %.o: %.c
-	$(CC) $(CCFLAGS) -c $<
+	$(CC) $(CXXFLAGS) -c $<
 
 clean:
 	rm -rf *.o $(TARGET)
