@@ -9,7 +9,7 @@ all: $(TARGET)
 $(TARGET): $(OBJS)
 	$(CC) $(CFLAGS) -o $@ $(OBJS) -lncursesw
 
-game.o: game.cpp
+game.o: game.cpp map.o
 	$(CC) $(CXXFLAGS) -c game.cpp
 
 map.o: map.cpp
