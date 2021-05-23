@@ -2,57 +2,46 @@
 #include <ncursesw/curses.h>
 #include "map.h"
 
-const int DEFAULT_WIDTH = 42;
-const int DEFAULT_HEIGHT = 42;
+const int MAP_WIN_WIDTH = 42;
+const int MAP_WIN_HEIGHT = 21;
 
 WINDOW *init_game();
 void destroy_game(WINDOW *main_window);
 
 int main() {
-    WINDOW *main_window = init_game();
+    WINDOW *map_window = init_game();
     Map map;
-    // wprintw(main_window, "Snake Game\nPress Q to end program.\n\n");
-    // wrefresh(main_window);
-    // refresh();
+    mvprintw(2, 16, "Snake Game");
+    mvprintw(3, 10, "Press Q to end program.");
 
-    map.draw(main_window);
-    // refresh();
+    map.draw(map_window);
     getch();
-    // int key;
-    // while (true) {
-    //     key = getch();
-    //     if (key == 'q' || key == 'Q') {
-    //         break;
-    //     }
-    //     wprintw(main_window, "Input key: %c\n", key);
-    //     wrefresh(main_window);
-    // }
 
-    destroy_game(main_window);
+    destroy_game(map_window);
     return 0;
 }
 
 WINDOW *init_game() {
+    setlocale(LC_ALL, "");
     initscr();
-    // resize_term(DEFAULT_WIDTH, DEFAULT_HEIGHT);
     cbreak();
     curs_set(0);
     noecho();
     start_color();
     keypad(stdscr, true);
-    init_pair(1, COLOR_BLACK, COLOR_CYAN);
+    init_pair(1, COLOR_WHITE, COLOR_CYAN);
     refresh();
 
-    WINDOW *win = newwin(DEFAULT_HEIGHT, DEFAULT_WIDTH, 2, 2);
+    WINDOW *win = newwin(MAP_WIN_HEIGHT, MAP_WIN_WIDTH, 5, 3);
     wbkgd(win, COLOR_PAIR(1));
-    box(win, 0, 0);
+    wborder(win, ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ');
     wrefresh(win);
 
     return win;
 }
 
-void destroy_game(WINDOW *main_window) {
+void destroy_game(WINDOW *win) {
     endwin();
-    wborder(main_window, ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ');
-    delwin(main_window);
+    wborder(win, ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ');
+    delwin(win);
 }

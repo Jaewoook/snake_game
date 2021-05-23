@@ -1,10 +1,10 @@
 #ifndef __MAP__
 #define __MAP__
-const wchar_t* CHAR_BLOCK_IMMUTABLE_WALL = L"⬛";
-const wchar_t* CHAR_BLOCK_WALL = L"⬜️";
-// #define CHAR_BLOCK_EMPTY "⬚"
-const wchar_t* CHAR_BLOCK_EMPTY = L"🟪";
-const wchar_t* CHAR_BLOCK_GATE = L"🟪";
+#define CHAR_BLOCK_IMMUTABLE_WALL L"⬛"
+#define CHAR_BLOCK_WALL L"🟦"
+#define CHAR_BLOCK_EMPTY L"⬜️"
+// #define CHAR_BLOCK_EMPTY L"🟪"
+#define CHAR_BLOCK_GATE L"🟪"
 
 enum BlockType {
     BLOCK_EMPTY = 0,

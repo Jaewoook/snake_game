@@ -51,7 +51,7 @@ Map::Map(): size_x(21), size_y(21) {
 void Map::draw(WINDOW *win) {
     for (int i = 0; i < size_y; i++) {
         for (int j = 0; j < size_x; j++) {
-            mvwadd_wch(win, i + 1, j + 1, getCharByType(map[i][j]));
+            mvwaddwstr(win, i, j, getCharByType(map[i][j]));
         }
     }
     wrefresh(win);
