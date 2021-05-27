@@ -9,16 +9,16 @@ all: $(TARGET)
 $(TARGET): $(OBJS)
 	$(CC) $(CFLAGS) -o $@ $(OBJS) -lncursesw
 
-game.o: game.cpp map.o
+game.o: game.cpp
 	$(CC) $(CXXFLAGS) -c game.cpp
 
-map.o: map.cpp
+map.o: map.cpp map.h snake.h
 	$(CC) $(CXXFLAGS) -c map.cpp
 
-snake.o: snake.cpp
+snake.o: snake.cpp snake.h
 	$(CC) $(CXXFLAGS) -c snake.cpp
 
-%.o: %.c
+%.o: %.c %.h common.h
 	$(CC) $(CXXFLAGS) -c $<
 
 clean:
