@@ -1,5 +1,6 @@
 #include <ncursesw/curses.h>
 #include "map.h"
+#include "snake.h"
 
 // const int DEFAULT_MAP[21][21] = {
 //     {1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1},
@@ -51,10 +52,19 @@ Map::Map(): size_x(21), size_y(21) {
 void Map::draw(WINDOW *win) {
     for (int i = 0; i < size_y; i++) {
         for (int j = 0; j < size_x; j++) {
-            mvwaddwstr(win, i, j, getCharByType(map[i][j]));
+            mvwaddwstr(win, i, j, get_sym_by_type(map[i][j]));
         }
     }
     wrefresh(win);
+}
+
+void Map::draw_snake(Snake *snake) {
+    POSITION head_pos = snake->get_head_pos();
+}
+
+BlockType Map::get_block_type(POSITION pos) {
+    int type = map[pos.y][pos.x];
+    return static_cast<BlockType>(type);
 }
 
 Map::~Map() {
