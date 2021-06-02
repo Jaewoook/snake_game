@@ -2,28 +2,47 @@
 
 Simple snake game implemented using C++
 
+## Supported Platform
+
+| Platform | Support |
+|----------|:-------:|
+| Ubuntu | ✅ |
+| macOS | ⚠️ |
+| Windows | ❌ |
+
 ## Download
 
 You can find executable binary in release page.  
 **see [Releases](https://github.com/Jaewoook/snake_game/releases)**
 
-## Or build with your computer
-
-This commands only works on macOS.
-
-## First, run docker ubuntu image which is already installed ncurses and ncursesw
+## Play the game!
 
 ```sh
-chmod +x ./run-in-docker.sh
-./run-in-docker.sh
-docker attach snake_game
+./snake_game
 ```
 
-### Then, build this project using make
+## Build using your computer
+
+### Prerequisites
+
+**ubuntu:**
 
 ```sh
-cd /snake_game
-make
+sudo apt-get install -y build-essential libncurses5-dev libncursesw5-dev
+```
+
+**macOS:**
+
+```sh
+brew install ncurses
+```
+
+### Build this project with make
+
+```sh
+# grant execute permission to build.sh file
+chmod +x ./build.sh
+./build.sh
 ```
 
 ## Author
