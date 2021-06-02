@@ -19,7 +19,6 @@ enum BlockType {
 };
 
 class Map {
-    Context *context;
     int size_x, size_y;
     int **map;
     private:
@@ -39,9 +38,9 @@ class Map {
             }
         }
     public:
-        Map(Context *ctx);
-        void draw();
-        void draw_snake(Snake *snake);
+        Map();
+        void draw(Context *ctx);
+        void draw_snake(Context *ctx);
         BlockType get_block_type(POSITION pos);
         const BlockType operator[](int x);
         ~Map();
