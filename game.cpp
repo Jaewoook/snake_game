@@ -1,27 +1,29 @@
 #include <locale>
 #include <cctype>
 #include <ncursesw/curses.h>
+#include "common.h"
 #include "map.h"
 #include "snake.cpp"
 
 const int MAP_WIN_WIDTH = 42;
 const int MAP_WIN_HEIGHT = 21;
 
-WINDOW *init_game();
-void destroy_game(WINDOW *main_window);
+WINDOW *init_window();
+void destroy_game(WINDOW *map_window);
 void start_game(WINDOW *win, Map *map, Snake *snake);
 
 int main() {
-    WINDOW *map_window = init_game();
-    Map map;
-    Snake snake;
+    WINDOW *map_window = init_window();
+    Context ctx(map_window);
+    Map map(&ctx);
+    Snake snake(&ctx);
     char input;
     mvprintw(2, 18, "Snake Game");
     mvprintw(4, 10, "Press S to start game");
     mvprintw(5, 10, "Press Q to exit");
 
-    map.draw(map_window);
-    while (input = toupper(getch())) {
+    map.draw();
+    while (!!(input = toupper(getch()))) {
         //  exit
         if (input == 'Q') {
             break;
@@ -37,7 +39,7 @@ int main() {
     return 0;
 }
 
-WINDOW *init_game() {
+WINDOW *init_window() {
     setlocale(LC_ALL, "");
     initscr();
     cbreak();
