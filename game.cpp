@@ -61,3 +61,7 @@ void destroy_game(WINDOW *win) {
     wborder(win, ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ');
     delwin(win);
 }
+
+void start_game(WINDOW *win, Map *map, Snake *snake) {
+    //  TODO start game logic
+}
