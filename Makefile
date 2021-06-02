@@ -31,7 +31,7 @@ map.o: map.cpp map.h
 snake.o: snake.cpp snake.h
 	$(CC) $(I_NCURSES) $(L_NCURSES) $(D_NCURSES) $(CFLAGS) -c $<
 
-%.o: %.c %.h
+%.o: %.c %.h common.h
 	$(CC) $(CFLAGS) -c $<
 
 clean:

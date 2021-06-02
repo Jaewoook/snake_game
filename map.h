@@ -1,10 +1,14 @@
+#include "snake.h"
+#include "common.h"
+
 #ifndef __MAP__
 #define __MAP__
-#define CHAR_BLOCK_IMMUTABLE_WALL L"⬛"
-#define CHAR_BLOCK_WALL L"🟦"
-#define CHAR_BLOCK_EMPTY L"⬜️"
+
+#define SYM_BLOCK_IMMUTABLE_WALL L"⬛"
+#define SYM_BLOCK_WALL L"🟦"
+#define SYM_BLOCK_EMPTY L"⬜️"
 // #define CHAR_BLOCK_EMPTY L"🟪"
-#define CHAR_BLOCK_GATE L"🟪"
+#define SYM_BLOCK_GATE L"🟪"
 
 enum BlockType {
     BLOCK_EMPTY = 0,
@@ -18,17 +22,17 @@ class Map {
     int size_x, size_y;
     int **map;
     private:
-        const wchar_t *getCharByType(int type) {
+        const wchar_t *get_sym_by_type(int type) {
             switch (type) {
                 case BLOCK_EMPTY:
-                    return CHAR_BLOCK_EMPTY;
+                    return SYM_BLOCK_EMPTY;
                 case BLOCK_IMMUTABLE_WALL:
-                    return CHAR_BLOCK_IMMUTABLE_WALL;
+                    return SYM_BLOCK_IMMUTABLE_WALL;
                 case BLOCK_WALL:
-                    return CHAR_BLOCK_WALL;
+                    return SYM_BLOCK_WALL;
                 case BLOCK_GATE_IN:
                 case BLOCK_GATE_OUT:
-                    return CHAR_BLOCK_GATE;
+                    return SYM_BLOCK_GATE;
                 default:
                     return L" ";
             }
@@ -36,6 +40,9 @@ class Map {
     public:
         Map();
         void draw(WINDOW *win);
+        void draw_snake(Snake *snake);
+        BlockType get_block_type(POSITION pos);
+        const BlockType operator[](int x);
         ~Map();
 };
 
