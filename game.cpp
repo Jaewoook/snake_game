@@ -14,15 +14,15 @@ void start_game(WINDOW *win, Map *map, Snake *snake);
 
 int main() {
     WINDOW *map_window = init_window();
-    Context ctx(map_window);
-    Map map(&ctx);
-    Snake snake(&ctx);
+    Map map;
+    Snake snake;
+    Context ctx(map_window, &map, &snake);
     char input;
     mvprintw(2, 18, "Snake Game");
     mvprintw(4, 10, "Press S to start game");
     mvprintw(5, 10, "Press Q to exit");
 
-    map.draw();
+    map.draw(&ctx);
     while (!!(input = toupper(getch()))) {
         //  exit
         if (input == 'Q') {

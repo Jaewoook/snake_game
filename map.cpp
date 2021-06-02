@@ -25,7 +25,7 @@
 //     {1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1},
 // };
 
-Map::Map(Context *ctx): context(ctx), size_x(21), size_y(21) {
+Map::Map(): size_x(21), size_y(21) {
     map = new int*[size_y];
     for (int i = 0; i < size_y; i++) {
         map[i] = new int[size_x];
@@ -48,17 +48,17 @@ Map::Map(Context *ctx): context(ctx), size_x(21), size_y(21) {
     }
 }
 
-void Map::draw() {
+void Map::draw(Context *ctx) {
     for (int i = 0; i < size_y; i++) {
         for (int j = 0; j < size_x; j++) {
-            mvwaddwstr(context->win, i, j, get_sym_by_type(map[i][j]));
+            mvwaddwstr(ctx->win, i, j, get_sym_by_type(map[i][j]));
         }
     }
-    context->update();
+    ctx->update();
 }
 
-void Map::draw_snake(Snake *snake) {
-    POSITION head_pos = snake->get_head_pos();
+void Map::draw_snake(Context *ctx) {
+    POSITION head_pos = ctx->snake->get_head_pos();
 }
 
 BlockType Map::get_block_type(POSITION pos) {
