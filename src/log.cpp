@@ -19,6 +19,7 @@ void log(const char *msg, const char *module) {
 
     if (log_stream.is_open()) {
         log_stream << "[" << get_time() << "] " << module << ": " << msg << "\n";
+        log_stream.flush();
     }
 }
 
