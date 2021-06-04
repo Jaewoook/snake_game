@@ -12,7 +12,7 @@ char *get_time() {
     return strtok(ctime(&curr_time), "\n");
 }
 
-void log(const char *msg, const char *module) {
+void log(const char *module, const char *msg) {
     #ifndef LOGGING
         return;
     #endif
@@ -26,7 +26,7 @@ void log(const char *msg, const char *module) {
 void log_open() {
     #if LOGGING
         log_stream = ofstream(LOG_FILENAME);
-        log("log open");
+        log("main", "log open");
     #endif
 }
 

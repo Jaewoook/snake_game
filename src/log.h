@@ -12,7 +12,7 @@
 
 #define DEFAULT_MODULE "snake_game"
 
-void log(const char *msg, const char *module = DEFAULT_MODULE);
+void log(const char *module = DEFAULT_MODULE, const char *msg = "");
 void log_open();
 void log_close();
 
