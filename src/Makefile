@@ -1,11 +1,11 @@
 CC = g++
-CFLAGS = -std=c++11 -g -Wall
+CFLAGS = -std=c++11 -g -Wall -pthread
 SRCDIR = src/
-OBJS = game.o map.o snake.o common.o
+OBJS = game.o map.o snake.o common.o log.o
 TARGET = snake_game
 I_NCURSES =
 L_NCURSES =
-D_NCURSES =
+D_NCURSES = -DLOGGING=1
 UNAME := $(shell uname -s)
 
 # Set options for macOS
@@ -20,12 +20,12 @@ all: $(TARGET)
 	@echo compiled binary target: $(UNAME)
 
 $(TARGET): $(OBJS)
-	$(CC) $(L_NCURSES) $(CFLAGS) -o $@ $(OBJS) -lncursesw
+	$(CC) $(L_NCURSES) -o $@ $(OBJS) -lncursesw
 
-game.o: game.cpp map.o common.o
+game.o: game.cpp game.h common.o map.o snake.o log.o
 	$(CC) $(I_NCURSES) $(D_NCURSES) $(CFLAGS) -c game.cpp
 
-map.o: map.cpp map.h common.o
+map.o: map.cpp map.h common.o snake.o
 	$(CC) $(I_NCURSES) $(D_NCURSES) $(CFLAGS) -c $<
 
 snake.o: snake.cpp snake.h common.o
@@ -33,6 +33,9 @@ snake.o: snake.cpp snake.h common.o
 
 common.o: common.cpp common.h
 	$(CC) $(I_NCURSES) $(D_NCURSES) $(CFLAGS) -c $<
+
+log.o: log.cpp
+	$(CC) -c $<
 
 %.o: %.c %.h
 	$(CC) $(I_NCURSES) $(D_NCURSES) $(CFLAGS) -c $<
