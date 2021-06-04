@@ -1,5 +1,6 @@
 #include <ncursesw/curses.h>
 #include "map.h"
+#include "log.h"
 
 // const int DEFAULT_MAP[21][21] = {
 //     {1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1},
@@ -30,6 +31,14 @@ Map::Map(): size_x(21), size_y(21) {
     for (int i = 0; i < size_y; i++) {
         map[i] = new int[size_x];
     }
+    init_map();
+}
+
+void Map::init_map() {
+    if (map == nullptr) {
+        log("map ptr does not assigned");
+        return;
+    }
 
     for (int i = 0; i < size_y; i++) {
         for (int j = 0; j < size_x; j++) {
@@ -48,17 +57,17 @@ Map::Map(): size_x(21), size_y(21) {
     }
 }
 
-void Map::draw(Context *ctx) {
+void Map::draw(WINDOW *win) {
     for (int i = 0; i < size_y; i++) {
         for (int j = 0; j < size_x; j++) {
-            mvwaddwstr(ctx->win, i, j, get_sym_by_type(map[i][j]));
+            mvwaddwstr(win, i, j, get_sym_by_type(map[i][j]));
         }
     }
-    ctx->update();
+    wrefresh(win);
 }
 
-void Map::draw_snake(Context *ctx) {
-    POSITION head_pos = ctx->snake->get_head_pos();
+void Map::draw_snake(WINDOW *win, Snake *snake) {
+    POSITION head_pos = snake->get_head_pos();
 }
 
 BlockType Map::get_block_type(POSITION pos) {
@@ -66,7 +75,13 @@ BlockType Map::get_block_type(POSITION pos) {
     return static_cast<BlockType>(type);
 }
 
+void Map::reset() {
+    init_map();
+}
+
 Map::~Map() {
+    log("Destruct map", "Map");
+
     for (int i = 0; i < size_y; i++) {
         delete[] map[i];
     }
