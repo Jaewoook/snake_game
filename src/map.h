@@ -1,3 +1,4 @@
+#include <ncursesw/curses.h>
 #include "snake.h"
 #include "common.h"
 
@@ -19,9 +20,11 @@ enum BlockType {
 };
 
 class Map {
-    int size_x, size_y;
-    int **map;
+
     private:
+        int size_x, size_y;
+        int **map;
+        void init_map();
         const wchar_t *get_sym_by_type(int type) {
             switch (type) {
                 case BLOCK_EMPTY:
@@ -37,12 +40,14 @@ class Map {
                     return L" ";
             }
         }
+
     public:
         Map();
-        void draw(Context *ctx);
-        void draw_snake(Context *ctx);
+        void draw(WINDOW *win);
+        void draw_snake(WINDOW *win, Snake *snake);
         BlockType get_block_type(POSITION pos);
         const BlockType operator[](int x);
+        void reset();
         ~Map();
 };
 

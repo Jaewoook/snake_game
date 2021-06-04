@@ -6,19 +6,13 @@
 
 #define SYM_SNAKE_HEAD L"🟨"
 
-enum SnakeDirection {
-    UP = 0,
-    RIGHT = 1,
-    DOWN = 2,
-    LEFT = 3,
-};
-
 class Snake {
     private:
         std::queue<POSITION> snake_pos;
         POSITION head_pos;
-        SnakeDirection direction;
+        DIRECTION direction;
         int size;
+
     public:
         Snake():
             head_pos { 10, 10 },
@@ -30,8 +24,9 @@ class Snake {
         void update_head_pos(int y, int x) {
             head_pos = POSITION { x, y };
         }
-        SnakeDirection get_direction() { return direction; }
-        void change_direction(SnakeDirection direction);
+        DIRECTION get_direction() { return direction; }
+        void change_direction(DIRECTION direction) { this->direction = direction; }
+        void reset();
 };
 
 #endif

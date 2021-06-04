@@ -1,14 +1,8 @@
 #include <fstream>
 #include <ctime>
+#include "log.h"
 
 using namespace std;
-
-#if defined(LOGGING)
-const char *LOG_FILENAME = "log.txt";
-#else
-#define LOGGING 0
-const char *LOG_FILENAME = "";
-#endif
 
 ofstream log_stream;
 
@@ -17,9 +11,13 @@ const char *get_time() {
     return ctime(&curr_time);
 }
 
-void log(const char* msg) {
+void log(const char *msg, const char *module) {
+    if (!LOGGING) {
+        return;
+    }
+
     if (log_stream.is_open()) {
-        log_stream << get_time() << ": " << msg;
+        log_stream << "[" << get_time() << "] " << module << ": " << msg << "\n";
     }
 }
 
