@@ -20,7 +20,7 @@ all: $(TARGET)
 	@echo compiled binary target: $(UNAME)
 
 $(TARGET): $(OBJS)
-	$(CC) $(L_NCURSES) -o $@ $(OBJS) -lncursesw
+	$(CC) $(L_NCURSES) -o $@ $(OBJS) -lncursesw -lpthread
 
 game.o: game.cpp game.h common.h log.o context.o
 	$(CC) $(I_NCURSES) $(D_NCURSES) $(CFLAGS) -c game.cpp
