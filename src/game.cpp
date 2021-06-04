@@ -15,14 +15,19 @@ const int MAP_WIN_HEIGHT = 21;
 
 Game::Game(WINDOW *map_win, Context *ctx): win(map_win), ctx(ctx) {
     ctx->get_map()->draw(win);
+    prepared = true;
+    playing = false;
+    score = 0;
 }
 
 std::thread Game::create_input_loop() {
+    log("Game", "Create input loop thread");
     return std::thread([&](std::function<void (LOOP_FINISH_REASON reason)> callback) {
         char ch;
         while (true) {
             ch = toupper(getch());
-            log(std::strcat("Key input: ", &ch), "input thread");
+            log("input thread", "Key input: ");
+            log("input thread", &ch);
 
             switch (ch) {
             case KEY_UP:
@@ -38,16 +43,17 @@ std::thread Game::create_input_loop() {
                 ctx->get_snake()->change_direction(LEFT);
                 break;
             case 'S':
-                log("attempt to stop game", "input thread");
+                log("input thread", "attempt to stop game");
                 callback(LOOP_STOP_CMD);
                 return;
             case 'P':
-                log("Attempt to pause game", "input thread");
+                log("input thread", "Attempt to pause game");
                 callback(LOOP_PAUSE_CMD);
                 return;
             }
         }
     }, [&](LOOP_FINISH_REASON reason) {
+        log("input thread callback", (char *) &reason);
         switch (reason)
         {
         case LOOP_STOP_CMD:
@@ -61,6 +67,7 @@ std::thread Game::create_input_loop() {
 }
 
 std::thread Game::create_drawer() {
+    log("Game", "Create drawer thread");
     return std::thread([&]() {
         while (true) {
             wrefresh(win);
@@ -74,15 +81,19 @@ void Game::start() {
         return;
     }
 
+    log("Game", "Start game");
     prepared = false;
     playing = true;
     std::thread t = create_input_loop();
+    t.join();
 }
 
 void Game::pause() {
     if (!playing) {
         return;
     }
+
+    log("Game", "Pause game");
     playing = false;
 }
 
@@ -90,12 +101,16 @@ void Game::stop() {
     if (playing) {
         return;
     }
+
+    log("Game", "Stop game");
 }
 
 void Game::reset() {
     if (playing) {
         return;
     }
+
+    log("Game", "Reset game");
     ctx->reset();
     score = 0;
     prepared = true;
@@ -116,13 +131,13 @@ int main() {
     while (input = toupper(getch())) {
         //  exit
         if (input == 'Q') {
-            log("Quit game");
+            log("main", "Attempt to quit game");
             break;
         }
 
         //  start game
         if (input == 'S') {
-            log("Start game");
+            log("main", "Attempt to start game");
             game.start();
         }
     }
@@ -150,12 +165,12 @@ void init() {
     refresh();
 
     log_open();
-    log("Init");
+    log("main", "Init");
 }
 
 void cleanup() {
-    log("Cleanup");
     endwin();
+    log("main", "log close");
     log_close();
 }
 
@@ -169,7 +184,7 @@ WINDOW *init_window(int width, int height, int top, int left) {
 }
 
 void destroy_window(WINDOW *win) {
-    log("Destroy window");
+    log("main", "Destroy window");
     wborder(win, ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ');
     delwin(win);
 }

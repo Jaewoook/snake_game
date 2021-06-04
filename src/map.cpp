@@ -36,7 +36,7 @@ Map::Map(): size_x(21), size_y(21) {
 
 void Map::init_map() {
     if (map == nullptr) {
-        log("map ptr does not assigned");
+        log("Map", "map ptr does not assigned");
         return;
     }
 
@@ -80,7 +80,7 @@ void Map::reset() {
 }
 
 Map::~Map() {
-    log("Destruct map", "Map");
+    log("Map", "Destruct map");
 
     for (int i = 0; i < size_y; i++) {
         delete[] map[i];
