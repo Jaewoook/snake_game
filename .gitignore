@@ -1,3 +1,4 @@
 .DS_Store
 *.o
 snake_game
+log.txt

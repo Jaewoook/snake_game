@@ -1,11 +1,11 @@
 CC = g++
-CFLAGS = -std=c++11 -g -Wall -pthread
+CFLAGS = -std=c++11 -g -Wall -pthread -DLOGGING=1
 SRCDIR = src/
 OBJS = game.o context.o map.o snake.o log.o
 TARGET = snake_game
 I_NCURSES =
 L_NCURSES =
-D_NCURSES = -DLOGGING=1
+D_NCURSES =
 UNAME := $(shell uname -s)
 
 # Set options for macOS

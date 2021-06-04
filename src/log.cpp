@@ -1,20 +1,21 @@
 #include <fstream>
 #include <ctime>
+#include <cstring>
 #include "log.h"
 
 using namespace std;
 
 ofstream log_stream;
 
-const char *get_time() {
+char *get_time() {
     auto curr_time = time(NULL);
-    return ctime(&curr_time);
+    return strtok(ctime(&curr_time), "\n");
 }
 
 void log(const char *msg, const char *module) {
-    if (!LOGGING) {
+    #ifndef LOGGING
         return;
-    }
+    #endif
 
     if (log_stream.is_open()) {
         log_stream << "[" << get_time() << "] " << module << ": " << msg << "\n";
@@ -22,10 +23,10 @@ void log(const char *msg, const char *module) {
 }
 
 void log_open() {
-    if (LOGGING) {
+    #if LOGGING
         log_stream = ofstream(LOG_FILENAME);
         log("log open");
-    }
+    #endif
 }
 
 void log_close() {
