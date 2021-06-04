@@ -1,9 +1,6 @@
 #include "context.h"
 
-Context::Context() {
-    map = Map();
-    snake = Snake();
-}
+Context::Context(): map(Map()), snake(Snake()) {}
 
 Map *Context::get_map() {
     return &map;
