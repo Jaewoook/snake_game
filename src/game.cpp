@@ -1,4 +1,4 @@
-#include <string>
+#include <cstring>
 #include <locale>
 #include <cctype>
 #include <ncursesw/curses.h>
