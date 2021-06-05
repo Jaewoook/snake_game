@@ -15,6 +15,7 @@ const int MAP_WIN_HEIGHT = 21;
 
 Game::Game(WINDOW *map_win, Context *ctx): win(map_win), ctx(ctx) {
     ctx->get_map()->draw(win);
+    ctx->get_map()->draw_snake(win, ctx->get_snake());
     prepared = true;
     playing = false;
     score = 0;
