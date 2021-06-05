@@ -12,8 +12,9 @@ class Context {
 
     public:
         Context();
-        Map *get_map();
-        Snake *get_snake();
+        Map *get_map() { return &map; }
+        Snake *get_snake() { return &snake; }
+        void refresh(WINDOW *win);
         void reset();
         ~Context();
 };
