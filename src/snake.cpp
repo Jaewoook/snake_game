@@ -28,7 +28,37 @@ void Snake::increase() {
     snake_pos.push_back(tail_pos);
 }
 
+void Snake::move() {
+    log("Snake", "move to next block");
+    auto old_head_pos = snake_pos.front();
+    POSITION head_pos { old_head_pos.x, old_head_pos.y };
+
+    switch (direction) {
+    case UP:
+        head_pos.y -= 1;
+        break;
+    case DOWN:
+        head_pos.y += 1;
+        break;
+    case LEFT:
+        head_pos.x -= 1;
+        break;
+    case RIGHT:
+        head_pos.x += 1;
+        break;
+    }
+    snake_pos.push_front(head_pos);
+    snake_pos.pop_back();
+}
+
+void Snake::change_direction(DIRECTION direction) {
+    log("Snake", "Change direction:");
+    log("Snake", (char *) &direction);
+    this->direction = direction;
+}
+
 void Snake::reset() {
+    log("Snake", "reset");
     direction = RIGHT;
     init_snake_pos();
 }

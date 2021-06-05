@@ -31,10 +31,11 @@ class Snake {
     public:
         Snake();
         void increase();
+        void move();
         std::deque<POSITION> get_snake_pos() { return snake_pos; }
         int get_snake_size() { return snake_pos.size(); }
         DIRECTION get_direction() { return direction; }
-        void change_direction(DIRECTION direction) { this->direction = direction; }
+        void change_direction(DIRECTION direction);
         void reset();
 };
 
