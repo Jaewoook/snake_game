@@ -73,7 +73,7 @@ void Map::draw_snake(WINDOW *win, Snake *snake) {
     auto pos = snake->get_snake_pos();
     bool is_head = true;
     for (auto iter = pos.begin(); iter != pos.end(); iter++) {
-        mvwaddwstr(win, (*iter).y, (*iter).x, is_head ? SYM_SNAKE_HEAD : SYM_SNAKE_BODY);
+        mvwaddwstr(win, (*iter).y, (*iter).x * 2, is_head ? SYM_SNAKE_HEAD : SYM_SNAKE_BODY);
         if (is_head) {
             is_head = false;
         }
