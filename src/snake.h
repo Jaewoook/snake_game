@@ -6,8 +6,8 @@
 
 class Snake {
     private:
-        std::deque<POSITION> snake_pos;
         DIRECTION direction;
+        std::deque<POSITION> snake_pos;
         DIRECTION get_tail_direction() {
             int size = snake_pos.size();
             auto last_first = snake_pos[size - 1];

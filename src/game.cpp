@@ -25,8 +25,8 @@ std::thread Game::create_input_loop() {
     log("Game", "Create input loop thread");
     return std::thread([&](std::function<void (LOOP_FINISH_REASON reason)> callback) {
         char ch;
-        while (true) {
-            ch = toupper(getch());
+        while ((ch = getch()) && ch != ERR) {
+            ch = toupper(ch);
             log("input thread", "Key input: ");
             log("input thread", &ch);
 
@@ -129,7 +129,8 @@ int main() {
     Game game(map_window, &ctx);
     char input;
 
-    while (input = toupper(getch())) {
+    while ((input = getch()) && input != ERR) {
+        input = toupper(input);
         //  exit
         if (input == 'Q') {
             log("main", "Attempt to quit game");

@@ -26,7 +26,7 @@ class Game {
         void reset();
         bool is_playing() { return playing; }
         int get_score() { return score; }
-        int increase_score() { score++; }
+        void increase_score() { score++; }
         // ~Game();
 };
 
