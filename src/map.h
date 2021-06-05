@@ -8,8 +8,9 @@
 #define SYM_BLOCK_IMMUTABLE_WALL L"⬛"
 #define SYM_BLOCK_WALL L"🟦"
 #define SYM_BLOCK_EMPTY L"⬜️"
-// #define CHAR_BLOCK_EMPTY L"🟪"
 #define SYM_BLOCK_GATE L"🟪"
+#define SYM_SNAKE_HEAD L"🟥"
+#define SYM_SNAKE_BODY L"🟨"
 
 enum BlockType {
     BLOCK_EMPTY = 0,

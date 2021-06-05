@@ -27,6 +27,7 @@
 // };
 
 Map::Map(): size_x(21), size_y(21) {
+    log("Map", "Init");
     map = new int*[size_y];
     for (int i = 0; i < size_y; i++) {
         map[i] = new int[size_x];
@@ -58,6 +59,7 @@ void Map::init_map() {
 }
 
 void Map::draw(WINDOW *win) {
+    log("Map", "Draw");
     for (int i = 0; i < size_y; i++) {
         for (int j = 0; j < size_x; j++) {
             mvwaddwstr(win, i, j, get_sym_by_type(map[i][j]));
@@ -67,7 +69,16 @@ void Map::draw(WINDOW *win) {
 }
 
 void Map::draw_snake(WINDOW *win, Snake *snake) {
-    POSITION head_pos = snake->get_head_pos();
+    log("Map", "Draw snake");
+    auto pos = snake->get_snake_pos();
+    bool is_head = true;
+    for (auto iter = pos.begin(); iter != pos.end(); iter++) {
+        mvwaddwstr(win, (*iter).y, (*iter).x, is_head ? SYM_SNAKE_HEAD : SYM_SNAKE_BODY);
+        if (is_head) {
+            is_head = false;
+        }
+    }
+    wrefresh(win);
 }
 
 BlockType Map::get_block_type(POSITION pos) {
