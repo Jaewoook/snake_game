@@ -161,7 +161,7 @@ void init() {
     init_pair(1, COLOR_BLACK, COLOR_CYAN);
 
     //  print game text
-    mvprintw(2, 18, "Snake Game");
+    mvprintw(2, 14, "🐍 Snake Game");
     mvprintw(4, 10, "Press S to start game");
     mvprintw(5, 10, "Press Q to exit");
     refresh();
