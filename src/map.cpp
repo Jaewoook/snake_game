@@ -72,7 +72,12 @@ void Map::draw_snake(WINDOW *win, Snake *snake) {
     auto pos = snake->get_snake_pos();
     bool is_head = true;
     for (auto iter = pos.begin(); iter != pos.end(); iter++) {
-        mvwaddwstr(win, (*iter).y, (*iter).x * 2, is_head ? SYM_SNAKE_HEAD : SYM_SNAKE_BODY);
+        // old code for displaying snake at specific position
+        // this code does not seem to be working becuase the second position of X block is not properly overwritten
+        // mvwaddwstr(win, (*iter).y, (*iter).x + 2, is_head ? SYM_SNAKE_HEAD : SYM_SNAKE_BODY);
+
+        mvwdelch(win, (*iter).y, (*iter).x + 2);
+        mvwins_wstr(win, (*iter).y, (*iter).x + 2, is_head ? SYM_SNAKE_HEAD : SYM_SNAKE_BODY);
         if (is_head) {
             is_head = false;
         }
