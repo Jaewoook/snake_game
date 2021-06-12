@@ -119,7 +119,7 @@ void Game::reset() {
 void init();
 void cleanup();
 WINDOW *init_window(int width, int height, int top, int left, bool border = false, int pair_num = 1);
-void destroy_window(WINDOW *map_window);
+void destroy_window(WINDOW *window);
 void show_quit_warning();
 void hide_quit_warning();
 
@@ -127,12 +127,23 @@ int main() {
     init();
     WINDOW *map_window = init_window(MAP_WIN_WIDTH, MAP_WIN_HEIGHT, 7, 3);
     WINDOW *score_window = init_window(SCORE_WIN_WIDTH, SCORE_WIN_HEIGHT, 7, 53, true, 2);
+    WINDOW *mission_window = init_window(SCORE_WIN_WIDTH, SCORE_WIN_HEIGHT, 16, 53, true, 2);
+
+    //  print score board window texts
     mvwprintw(score_window, 0, 4, " Score Board ");
     mvwprintw(score_window, 2, 2, "B: ");
     mvwprintw(score_window, 3, 2, "+: ");
     mvwprintw(score_window, 4, 2, "-: ");
     mvwprintw(score_window, 5, 2, "G: ");
     wrefresh(score_window);
+    //  print mission window texts
+    mvwprintw(mission_window, 0, 6, " Mission ");
+    mvwprintw(mission_window, 2, 2, "B: ");
+    mvwprintw(mission_window, 3, 2, "+: ");
+    mvwprintw(mission_window, 4, 2, "-: ");
+    mvwprintw(mission_window, 5, 2, "G: ");
+    wrefresh(mission_window);
+
     Context ctx;
     Game game(map_window, &ctx);
     int input;
@@ -158,6 +169,7 @@ int main() {
 
     destroy_window(map_window);
     destroy_window(score_window);
+    destroy_window(mission_window);
     cleanup();
 
     return 0;
@@ -201,10 +213,10 @@ WINDOW *init_window(int width, int height, int top, int left, bool border, int p
     return win;
 }
 
-void destroy_window(WINDOW *win) {
+void destroy_window(WINDOW *window) {
     log("main", "Destroy window");
-    wborder(win, ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ');
-    delwin(win);
+    wborder(window, ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ');
+    delwin(window);
 }
 
 void show_quit_warning() {
