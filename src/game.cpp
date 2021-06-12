@@ -12,24 +12,22 @@
 
 const int MAP_WIN_WIDTH = 42;
 const int MAP_WIN_HEIGHT = 21;
+const int SCORE_WIN_WIDTH = 21;
+const int SCORE_WIN_HEIGHT = 7;
 
 Game::Game(WINDOW *map_win, Context *ctx): win(map_win), ctx(ctx) {
-    ctx->get_map()->draw(win);
-    ctx->get_map()->draw_snake(win, ctx->get_snake());
     prepared = true;
     playing = false;
     score = 0;
+    ctx->refresh(win);
 }
 
 std::thread Game::create_input_loop() {
     log("Game", "Create input loop thread");
     return std::thread([&](std::function<void (LOOP_FINISH_REASON reason)> callback) {
-        char ch;
+        int ch;
         while ((ch = getch()) && ch != ERR) {
             ch = toupper(ch);
-            log("input thread", "Key input: ");
-            log("input thread", &ch);
-
             switch (ch) {
             case KEY_UP:
                 ctx->get_snake()->change_direction(UP);
@@ -67,11 +65,12 @@ std::thread Game::create_input_loop() {
     });
 }
 
-std::thread Game::create_drawer() {
+std::thread Game::create_draw_loop() {
     log("Game", "Create drawer thread");
     return std::thread([&]() {
         while (true) {
-            wrefresh(win);
+            ctx->get_snake()->move();
+            ctx->refresh(win);
             std::this_thread::sleep_for(std::chrono::milliseconds(500));
         }
     });
@@ -119,21 +118,34 @@ void Game::reset() {
 
 void init();
 void cleanup();
-WINDOW *init_window(int width, int height, int top, int left);
+WINDOW *init_window(int width, int height, int top, int left, bool border = false, int pair_num = 1);
 void destroy_window(WINDOW *map_window);
+void show_quit_warning();
+void hide_quit_warning();
 
 int main() {
     init();
     WINDOW *map_window = init_window(MAP_WIN_WIDTH, MAP_WIN_HEIGHT, 7, 3);
+    WINDOW *score_window = init_window(SCORE_WIN_WIDTH, SCORE_WIN_HEIGHT, 7, 53, true, 2);
+    mvwprintw(score_window, 0, 4, " Score Board ");
+    mvwprintw(score_window, 2, 2, "B: ");
+    mvwprintw(score_window, 3, 2, "+: ");
+    mvwprintw(score_window, 4, 2, "-: ");
+    mvwprintw(score_window, 5, 2, "G: ");
+    wrefresh(score_window);
     Context ctx;
     Game game(map_window, &ctx);
-    char input;
+    int input;
 
     while ((input = getch()) && input != ERR) {
         input = toupper(input);
         //  exit
         if (input == 'Q') {
             log("main", "Attempt to quit game");
+            if (game.is_playing()) {
+                show_quit_warning();
+                continue;
+            }
             break;
         }
 
@@ -145,6 +157,7 @@ int main() {
     }
 
     destroy_window(map_window);
+    destroy_window(score_window);
     cleanup();
 
     return 0;
@@ -159,6 +172,7 @@ void init() {
     start_color();
     keypad(stdscr, true);
     init_pair(1, COLOR_BLACK, COLOR_CYAN);
+    init_pair(2, COLOR_YELLOW, COLOR_BLACK);
 
     //  print game text
     mvprintw(2, 18, "Snake Game");
@@ -176,10 +190,12 @@ void cleanup() {
     log_close();
 }
 
-WINDOW *init_window(int width, int height, int top, int left) {
+WINDOW *init_window(int width, int height, int top, int left, bool border, int pair_num) {
     WINDOW *win = newwin(height, width, top, left);
-    wbkgd(win, COLOR_PAIR(1));
-    wborder(win, ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ');
+    wbkgd(win, COLOR_PAIR(pair_num));
+    if (border) {
+        box(win, 0, 0);
+    }
     wrefresh(win);
 
     return win;
@@ -189,4 +205,12 @@ void destroy_window(WINDOW *win) {
     log("main", "Destroy window");
     wborder(win, ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ');
     delwin(win);
+}
+
+void show_quit_warning() {
+    mvprintw(30, 3, "Error: cannot quit because game is not finished yet.");
+}
+
+void hide_quit_warning() {
+    mvdelch(30, 3);
 }

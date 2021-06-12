@@ -65,7 +65,6 @@ void Map::draw(WINDOW *win) {
             mvwaddwstr(win, i, j, get_sym_by_type(map[i][j]));
         }
     }
-    wrefresh(win);
 }
 
 void Map::draw_snake(WINDOW *win, Snake *snake) {
@@ -78,7 +77,6 @@ void Map::draw_snake(WINDOW *win, Snake *snake) {
             is_head = false;
         }
     }
-    wrefresh(win);
 }
 
 BlockType Map::get_block_type(POSITION pos) {

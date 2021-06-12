@@ -17,7 +17,7 @@ class Game {
         WINDOW *win;
         Context *ctx;
         Game(WINDOW *map_win, Context *ctx);
-        std::thread create_drawer();
+        std::thread create_draw_loop();
         std::thread create_input_loop();
         void start();
         void pause();
