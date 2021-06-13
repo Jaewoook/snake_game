@@ -12,10 +12,10 @@
 
 const int MAP_WIN_WIDTH = 42;
 const int MAP_WIN_HEIGHT = 21;
-const int SCORE_WIN_WIDTH = 21;
-const int SCORE_WIN_HEIGHT = 7;
+const int SCORE_WIN_WIDTH = 24;
+const int SCORE_WIN_HEIGHT = 8;
 const int HELP_WIN_WIDTH = 42;
-const int HELP_WIN_HEIGHT = 11;
+const int HELP_WIN_HEIGHT = 9;
 
 const int INFO_MSG_X = 3;
 const int INFO_MSG_Y = 27;
@@ -153,21 +153,21 @@ int main() {
     WINDOW *help_window = init_window(HELP_WIN_WIDTH, HELP_WIN_HEIGHT, 29, 3, true, 2);
 
     //  print score board window texts
-    mvwprintw(score_window, 0, 4, " Score Board ");
-    mvwprintw(score_window, 2, 2, "B: ");
-    mvwprintw(score_window, 3, 2, "+: ");
-    mvwprintw(score_window, 4, 2, "-: ");
-    mvwprintw(score_window, 5, 2, "G: ");
+    mvwprintw(score_window, 0, 3, " Score Board ");
+    mvwprintw(score_window, 2, 4, "B: ");
+    mvwprintw(score_window, 3, 4, "+: ");
+    mvwprintw(score_window, 4, 4, "-: ");
+    mvwprintw(score_window, 5, 4, "G: ");
     wrefresh(score_window);
     //  print mission window texts
-    mvwprintw(mission_window, 0, 6, " Mission ");
-    mvwprintw(mission_window, 2, 2, "B: ");
-    mvwprintw(mission_window, 3, 2, "+: ");
-    mvwprintw(mission_window, 4, 2, "-: ");
-    mvwprintw(mission_window, 5, 2, "G: ");
+    mvwprintw(mission_window, 0, 3, " Mission ");
+    mvwprintw(mission_window, 2, 4, "B: ");
+    mvwprintw(mission_window, 3, 4, "+: ");
+    mvwprintw(mission_window, 4, 4, "-: ");
+    mvwprintw(mission_window, 5, 4, "G: ");
     wrefresh(mission_window);
     //  print help window
-    mvwprintw(help_window, 0, 14, " How to play? ");
+    mvwprintw(help_window, 0, 3, " How to play? ");
     mvwprintw(help_window, 2, 4, "Press S to start game");
     mvwprintw(help_window, 3, 4, "Press E to end game");
     mvwprintw(help_window, 4, 4, "Press P to pause game");
