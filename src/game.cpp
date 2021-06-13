@@ -17,10 +17,26 @@ const int SCORE_WIN_HEIGHT = 7;
 const int HELP_WIN_WIDTH = 42;
 const int HELP_WIN_HEIGHT = 11;
 
+const int INFO_MSG_X = 3;
+const int INFO_MSG_Y = 27;
+
+int prev_msg_len = 0;
+
+void show_info_msg(const char *msg) {
+    for (int i = 0; i < prev_msg_len; i++) {
+        mvdelch(INFO_MSG_Y, INFO_MSG_X + i);
+    }
+
+    mvprintw(INFO_MSG_Y, INFO_MSG_X, "> ");
+    prev_msg_len = strlen(msg);
+    mvprintw(INFO_MSG_Y, INFO_MSG_X + 2, msg);
+}
+
 Game::Game(WINDOW *map_win, Context *ctx): win(map_win), ctx(ctx) {
     prepared = true;
     playing = false;
     score = 0;
+    show_info_msg("Are you ready?");
     ctx->refresh(win);
 }
 
@@ -86,6 +102,7 @@ void Game::start() {
     log("Game", "Start game");
     prepared = false;
     playing = true;
+    show_info_msg("Game started");
     std::thread t = create_input_loop();
     t.join();
 }
@@ -96,6 +113,7 @@ void Game::pause() {
     }
 
     log("Game", "Pause game");
+    show_info_msg("Game paused");
     playing = false;
 }
 
@@ -105,6 +123,7 @@ void Game::stop() {
     }
 
     log("Game", "Stop game");
+    show_info_msg("Game stopped");
 }
 
 void Game::reset() {
@@ -116,6 +135,7 @@ void Game::reset() {
     ctx->reset();
     score = 0;
     prepared = true;
+    show_info_msg("Game reset");
 }
 
 void init();
@@ -226,7 +246,7 @@ void destroy_window(WINDOW *window) {
 }
 
 void show_quit_warning() {
-    mvprintw(30, 3, "Error: cannot quit because game is not finished yet.");
+    mvprintw(27, 3, "Error: cannot quit because game is not finished yet.");
 }
 
 void hide_quit_warning() {
