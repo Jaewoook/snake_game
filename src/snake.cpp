@@ -1,3 +1,4 @@
+#include <string>
 #include "snake.h"
 #include "log.h"
 
@@ -52,8 +53,9 @@ void Snake::move() {
 }
 
 void Snake::change_direction(DIRECTION direction) {
-    log("Snake", "Change direction:");
-    log("Snake", (char *) &direction);
+    std::string log_msg("Change direction - ");
+    log_msg += DIRECTION_LABEL[direction];
+    log("Snake", log_msg.c_str());
     this->direction = direction;
 }
 

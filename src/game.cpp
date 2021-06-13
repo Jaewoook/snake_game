@@ -1,14 +1,15 @@
 #include <cstring>
 #include <locale>
-#include <cctype>
+#include <string>
 #include <ncursesw/curses.h>
 #include <thread>
 #include <chrono>
 #include <functional>
-#include "common.h"
 #include "context.h"
 #include "game.h"
 #include "log.h"
+
+const char *DIRECTION_LABEL[] = {"UP", "RIGHT", "DOWN", "LEFT"};
 
 const int MAP_WIN_WIDTH = 42;
 const int MAP_WIN_HEIGHT = 21;
@@ -44,7 +45,13 @@ std::thread Game::create_input_loop() {
     log("Game", "Create input loop thread");
     return std::thread([&](std::function<void (LOOP_FINISH_REASON reason)> callback) {
         int ch;
-        while ((ch = getch()) && ch != ERR) {
+        bool exit_flag = false;
+        LOOP_FINISH_REASON reason;
+        std::string log_msg;
+        while (!exit_flag && (ch = getch()) && ch != ERR) {
+            log_msg = std::string("input captured - ");
+            log_msg += ch;
+            log("input thread", log_msg.c_str());
             ch = toupper(ch);
             switch (ch) {
             case KEY_UP:
@@ -59,21 +66,24 @@ std::thread Game::create_input_loop() {
             case KEY_LEFT:
                 ctx->get_snake()->change_direction(LEFT);
                 break;
-            case 'S':
-                log("input thread", "attempt to stop game");
-                callback(LOOP_STOP_CMD);
-                return;
+            case 'E':
+                log("input thread", "attempt to end game");
+                reason = LOOP_END_CMD;
+                exit_flag = true;
+                break;
             case 'P':
                 log("input thread", "Attempt to pause game");
-                callback(LOOP_PAUSE_CMD);
-                return;
+                reason = LOOP_PAUSE_CMD;
+                exit_flag = true;
+                break;
             }
         }
+        callback(reason);
     }, [&](LOOP_FINISH_REASON reason) {
         log("input thread callback", (char *) &reason);
         switch (reason)
         {
-        case LOOP_STOP_CMD:
+        case LOOP_END_CMD:
             stop();
             break;
         case LOOP_PAUSE_CMD:
@@ -99,11 +109,11 @@ void Game::start() {
         return;
     }
 
-    log("Game", "Start game");
     prepared = false;
     playing = true;
-    show_info_msg("Game started");
     std::thread t = create_input_loop();
+    log("Game", "Start game");
+    show_info_msg("Game started");
     t.join();
 }
 
@@ -112,18 +122,19 @@ void Game::pause() {
         return;
     }
 
+    playing = false;
     log("Game", "Pause game");
     show_info_msg("Game paused");
-    playing = false;
 }
 
 void Game::stop() {
-    if (playing) {
+    if (!playing) {
         return;
     }
 
-    log("Game", "Stop game");
-    show_info_msg("Game stopped");
+    playing = false;
+    log("Game", "End game");
+    show_info_msg("Game ended");
 }
 
 void Game::reset() {
@@ -131,10 +142,10 @@ void Game::reset() {
         return;
     }
 
-    log("Game", "Reset game");
     ctx->reset();
     score = 0;
     prepared = true;
+    log("Game", "Reset game");
     show_info_msg("Game reset");
 }
 

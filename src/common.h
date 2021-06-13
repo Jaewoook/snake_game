@@ -12,8 +12,10 @@ enum DIRECTION {
     LEFT = 3,
 };
 
+extern const char *DIRECTION_LABEL[];
+
 enum LOOP_FINISH_REASON {
-    LOOP_STOP_CMD,
+    LOOP_END_CMD,
     LOOP_PAUSE_CMD,
 };
 
