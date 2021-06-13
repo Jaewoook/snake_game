@@ -3,7 +3,7 @@
     "tasks": [
         {
             "label": "Build",
-            "command": "make",
+            "command": "./build.sh",
             "type": "shell",
             "args": [],
             "problemMatcher": [],
@@ -25,7 +25,7 @@
         {
             "label": "Clean",
             "type": "shell",
-            "command": "make clean",
+            "command": "./clean.sh",
             "problemMatcher": [],
             "group": "build"
         }
