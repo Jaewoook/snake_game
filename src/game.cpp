@@ -14,6 +14,8 @@ const int MAP_WIN_WIDTH = 42;
 const int MAP_WIN_HEIGHT = 21;
 const int SCORE_WIN_WIDTH = 21;
 const int SCORE_WIN_HEIGHT = 7;
+const int HELP_WIN_WIDTH = 42;
+const int HELP_WIN_HEIGHT = 11;
 
 Game::Game(WINDOW *map_win, Context *ctx): win(map_win), ctx(ctx) {
     prepared = true;
@@ -125,9 +127,10 @@ void hide_quit_warning();
 
 int main() {
     init();
-    WINDOW *map_window = init_window(MAP_WIN_WIDTH, MAP_WIN_HEIGHT, 7, 3);
-    WINDOW *score_window = init_window(SCORE_WIN_WIDTH, SCORE_WIN_HEIGHT, 7, 53, true, 2);
-    WINDOW *mission_window = init_window(SCORE_WIN_WIDTH, SCORE_WIN_HEIGHT, 16, 53, true, 2);
+    WINDOW *map_window = init_window(MAP_WIN_WIDTH, MAP_WIN_HEIGHT, 5, 3);
+    WINDOW *score_window = init_window(SCORE_WIN_WIDTH, SCORE_WIN_HEIGHT, 5, 50, true, 2);
+    WINDOW *mission_window = init_window(SCORE_WIN_WIDTH, SCORE_WIN_HEIGHT, 14, 50, true, 2);
+    WINDOW *help_window = init_window(HELP_WIN_WIDTH, HELP_WIN_HEIGHT, 29, 3, true, 2);
 
     //  print score board window texts
     mvwprintw(score_window, 0, 4, " Score Board ");
@@ -143,6 +146,13 @@ int main() {
     mvwprintw(mission_window, 4, 2, "-: ");
     mvwprintw(mission_window, 5, 2, "G: ");
     wrefresh(mission_window);
+    //  print help window
+    mvwprintw(help_window, 0, 14, " How to play? ");
+    mvwprintw(help_window, 2, 4, "Press S to start game");
+    mvwprintw(help_window, 3, 4, "Press E to end game");
+    mvwprintw(help_window, 4, 4, "Press P to pause game");
+    mvwprintw(help_window, 6, 4, "Press Q to exit");
+    wrefresh(help_window);
 
     Context ctx;
     Game game(map_window, &ctx);
@@ -185,11 +195,7 @@ void init() {
     keypad(stdscr, true);
     init_pair(1, COLOR_BLACK, COLOR_CYAN);
     init_pair(2, COLOR_YELLOW, COLOR_BLACK);
-
-    //  print game text
     mvprintw(2, 14, "🐍 Snake Game");
-    mvprintw(4, 10, "Press S to start game");
-    mvprintw(5, 10, "Press Q to exit");
     refresh();
 
     log_open();
