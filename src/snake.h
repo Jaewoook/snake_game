@@ -23,9 +23,9 @@ class Snake {
         }
         void init_snake_pos() {
             snake_pos.clear();
-            snake_pos.push_back(POSITION { 10, 10 });
-            snake_pos.push_back(POSITION { 9, 10 });
-            snake_pos.push_back(POSITION { 8, 10 });
+            snake_pos.push_back(POSITION { 6, 10 });
+            snake_pos.push_back(POSITION { 5, 10 });
+            snake_pos.push_back(POSITION { 4, 10 });
         }
 
     public:
