@@ -19,4 +19,6 @@ enum LOOP_FINISH_REASON {
     LOOP_PAUSE_CMD,
 };
 
+extern const char *LOOP_FINISH_REASON_LABEL[];
+
 #endif

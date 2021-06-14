@@ -9,8 +9,6 @@
 #include "game.h"
 #include "log.h"
 
-const char *DIRECTION_LABEL[] = {"UP", "RIGHT", "DOWN", "LEFT"};
-
 const int MAP_WIN_WIDTH = 42;
 const int MAP_WIN_HEIGHT = 21;
 const int SCORE_WIN_WIDTH = 24;
@@ -80,9 +78,8 @@ std::thread Game::create_input_loop() {
         }
         callback(reason);
     }, [&](LOOP_FINISH_REASON reason) {
-        log("input thread callback", (char *) &reason);
-        switch (reason)
-        {
+        log("input thread callback", LOOP_FINISH_REASON_LABEL[reason]);
+        switch (reason) {
         case LOOP_END_CMD:
             stop();
             break;

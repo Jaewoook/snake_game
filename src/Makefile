@@ -1,7 +1,7 @@
 CC = g++
 CFLAGS = -std=c++11 -g -Wall -pthread -DLOGGING=1
 SRCDIR = src/
-OBJS = game.o context.o map.o snake.o log.o
+OBJS = game.o context.o map.o snake.o log.o common.o
 TARGET = snake_game
 I_NCURSES =
 L_NCURSES =
@@ -22,19 +22,22 @@ all: $(TARGET)
 $(TARGET): $(OBJS)
 	$(CC) $(L_NCURSES) -o $@ $(OBJS) -lncursesw -lpthread
 
-game.o: game.cpp game.h common.h log.o context.o
+game.o: game.cpp game.h common.o log.o context.o
 	$(CC) $(I_NCURSES) $(D_NCURSES) $(CFLAGS) -c game.cpp
 
-map.o: map.cpp map.h common.h log.o snake.o
+map.o: map.cpp map.h common.o log.o snake.o
 	$(CC) $(I_NCURSES) $(D_NCURSES) $(CFLAGS) -c $<
 
-snake.o: snake.cpp snake.h common.h log.o
+snake.o: snake.cpp snake.h common.o log.o
 	$(CC) $(I_NCURSES) $(D_NCURSES) $(CFLAGS) -c $<
 
 context.o: context.cpp context.h log.o snake.o map.o
 	$(CC) $(I_NCURSES) $(D_NCURSES) $(CFLAGS) -c $<
 
 log.o: log.cpp log.h
+	$(CC) $(CFLAGS) -c $<
+
+common.o: common.cpp common.h
 	$(CC) $(CFLAGS) -c $<
 
 %.o: %.c %.h
