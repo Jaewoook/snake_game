@@ -4,6 +4,7 @@
 #include <ncursesw/curses.h>
 #include <thread>
 #include <chrono>
+#include <atomic>
 #include <functional>
 #include "context.h"
 #include "game.h"
@@ -93,10 +94,10 @@ std::thread Game::create_input_loop() {
 std::thread Game::create_draw_loop() {
     log("Game", "Create drawer thread");
     return std::thread([&]() {
-        while (true) {
+        while (playing) {
             ctx->get_snake()->move();
             ctx->refresh(win);
-            std::this_thread::sleep_for(std::chrono::milliseconds(500));
+            std::this_thread::sleep_for(std::chrono::milliseconds(GAME_TICK));
         }
     });
 }
@@ -108,10 +109,12 @@ void Game::start() {
 
     prepared = false;
     playing = true;
-    std::thread t = create_input_loop();
+    std::thread input = create_input_loop();
+    std::thread tick = create_draw_loop();
     log("Game", "Start game");
     show_info_msg("Game started");
-    t.join();
+    input.join();
+    tick.join();
 }
 
 void Game::pause() {
@@ -139,11 +142,12 @@ void Game::reset() {
         return;
     }
 
-    ctx->reset();
+    ctx->reset(win);
     score = 0;
     prepared = true;
     log("Game", "Reset game");
     show_info_msg("Game reset");
+    ctx->refresh(win);
 }
 
 void init();
@@ -179,6 +183,7 @@ int main() {
     mvwprintw(help_window, 2, 4, "Press S to start game");
     mvwprintw(help_window, 3, 4, "Press E to end game");
     mvwprintw(help_window, 4, 4, "Press P to pause game");
+    mvwprintw(help_window, 5, 4, "Press R to reset game");
     mvwprintw(help_window, 6, 4, "Press Q to exit");
     wrefresh(help_window);
 
@@ -202,6 +207,9 @@ int main() {
         if (input == 'S') {
             log("main", "Attempt to start game");
             game.start();
+        } else if (input == 'R') {
+            log("main", "Attempt to reset game");
+            game.reset();
         }
     }
 

@@ -1,6 +1,6 @@
 #include <ncursesw/curses.h>
 #include <thread>
-#include <memory>
+#include <atomic>
 #include "common.h"
 
 #ifndef __GAME__
@@ -9,9 +9,9 @@
 class Game {
 
     private:
-        bool playing, prepared;
+        bool prepared;
         int score;
-        std::unique_ptr<std::thread> tick_thread;
+        std::atomic<bool> playing;
 
     public:
         WINDOW *win;
