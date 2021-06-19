@@ -3,7 +3,8 @@
 #ifndef __COMMON__
 #define __COMMON__
 
-#define GAME_TICK 1000
+#define GAME_TICK 500
+#define ITEM_LIFETICK 20
 
 typedef struct Position_t {
     int x, y;
