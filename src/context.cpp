@@ -9,8 +9,8 @@ void Context::refresh(WINDOW *win) {
     wrefresh(win);
 }
 
-void Context::reset() {
-    map.reset();
+void Context::reset(WINDOW *win) {
+    map.reset(win);
     snake.reset();
 }
 

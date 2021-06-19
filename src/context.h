@@ -15,7 +15,7 @@ class Context {
         Map *get_map() { return &map; }
         Snake *get_snake() { return &snake; }
         void refresh(WINDOW *win);
-        void reset();
+        void reset(WINDOW *win);
         ~Context();
 };
 
