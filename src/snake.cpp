@@ -42,10 +42,10 @@ void Snake::move() {
         head_pos.y += 1;
         break;
     case LEFT:
-        head_pos.x -= 1;
+        head_pos.x -= 2;
         break;
     case RIGHT:
-        head_pos.x += 1;
+        head_pos.x += 2;
         break;
     }
     snake_pos.push_front(head_pos);
