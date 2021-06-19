@@ -6,9 +6,9 @@ Simple snake game implemented using C++
 
 | Platform | Support |
 |----------|:-------:|
-| Ubuntu | ✅ |
-| macOS | ⚠️ |
-| Windows | ❌ |
+| Ubuntu / Linux | ✅ |
+| macOS | ✅ |
+| Windows | ❌ (Not Tested) |
 
 ## Download
 
