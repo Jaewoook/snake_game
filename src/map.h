@@ -5,12 +5,11 @@
 #ifndef __MAP__
 #define __MAP__
 
-#define SYM_BLOCK_IMMUTABLE_WALL L"⬛"
-#define SYM_BLOCK_WALL L"🟦"
-#define SYM_BLOCK_EMPTY L"⬜️"
-#define SYM_BLOCK_GATE L"🟪"
-#define SYM_SNAKE_HEAD L"🟥"
-#define SYM_SNAKE_BODY L"🟨"
+#define SYM_BLOCK_IMMUTABLE_WALL L"■"
+#define SYM_BLOCK_WALL L"□"
+#define SYM_BLOCK_GATE L"◇"
+#define SYM_SNAKE_HEAD L"▣"
+#define SYM_SNAKE_BODY L"▨"
 
 enum BlockType {
     BLOCK_EMPTY = 0,
@@ -25,11 +24,9 @@ class Map {
     private:
         int size_x, size_y;
         int **map;
-        void init_map();
+        void init_map(WINDOW *win = nullptr);
         const wchar_t *get_sym_by_type(int type) {
             switch (type) {
-                case BLOCK_EMPTY:
-                    return SYM_BLOCK_EMPTY;
                 case BLOCK_IMMUTABLE_WALL:
                     return SYM_BLOCK_IMMUTABLE_WALL;
                 case BLOCK_WALL:
@@ -48,7 +45,7 @@ class Map {
         void draw_snake(WINDOW *win, Snake *snake);
         BlockType get_block_type(POSITION pos);
         const BlockType operator[](int x);
-        void reset();
+        void reset(WINDOW *win);
         ~Map();
 };
 
