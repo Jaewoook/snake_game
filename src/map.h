@@ -66,10 +66,11 @@ class MapLoader {
 class MapController {
 
     private:
+        Map *map;
         std::vector<long> item_ids;
 
     public:
-        MapController();
+        MapController(Map *map): map(map) {};
         long generate_item(ItemType type);
         bool destroy_item(long item_id);
 };

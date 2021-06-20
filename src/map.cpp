@@ -1,4 +1,5 @@
 #include <ncursesw/curses.h>
+#include <fstream>
 #include "map.h"
 #include "log.h"
 
@@ -74,4 +75,8 @@ Map::~Map() {
         delete[] map[i];
     }
     delete[] map;
+}
+
+MapLoader::MapLoader() {
+
 }
