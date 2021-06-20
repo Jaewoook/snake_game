@@ -23,7 +23,11 @@ void Map::init_map(WINDOW *win) {
                 mvwdelch(win, i, j);
             }
             if (i == 0 || i == size_y - 1) {
-                map[i][j] = BLOCK_IMMUTABLE_WALL;
+                if (j == 0 || j == size_x - 1) {
+                    map[i][j] = BLOCK_IMMUTABLE_WALL;
+                } else {
+                    map[i][j] = BLOCK_WALL;
+                }
             } else if (j == 0 || j == size_x - 1) {
                 map[i][j] = BLOCK_IMMUTABLE_WALL;
             } else {

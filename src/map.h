@@ -1,4 +1,6 @@
+#include <iostream>
 #include <ncursesw/curses.h>
+#include <vector>
 #include "snake.h"
 #include "common.h"
 
@@ -17,6 +19,11 @@ enum BlockType {
     BLOCK_WALL = 2,
     BLOCK_GATE_IN = 3,
     BLOCK_GATE_OUT = 4,
+};
+
+enum ItemType {
+    ITEM_GROWTH = 0,
+    ITEM_POISON = 1,
 };
 
 class Map {
@@ -47,6 +54,24 @@ class Map {
         const BlockType operator[](int x);
         void reset(WINDOW *win);
         ~Map();
+};
+
+class MapLoader {
+
+    public:
+        MapLoader();
+        int **getMap(int level);
+};
+
+class MapController {
+
+    private:
+        std::vector<long> item_ids;
+
+    public:
+        MapController();
+        long generate_item(ItemType type);
+        bool destroy_item(long item_id);
 };
 
 #endif
