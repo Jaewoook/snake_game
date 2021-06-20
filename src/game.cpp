@@ -3,6 +3,9 @@
 #include <string>
 #include <ncursesw/curses.h>
 #include <thread>
+#include <cmath>
+#include <iomanip>
+#include <sstream>
 #include <chrono>
 #include <atomic>
 #include <functional>
@@ -13,7 +16,7 @@
 const int MAP_WIN_WIDTH = 42;
 const int MAP_WIN_HEIGHT = 21;
 const int SCORE_WIN_WIDTH = 24;
-const int SCORE_WIN_HEIGHT = 8;
+const int SCORE_WIN_HEIGHT = 9;
 const int HELP_WIN_WIDTH = 42;
 const int HELP_WIN_HEIGHT = 9;
 
@@ -32,12 +35,12 @@ void show_info_msg(const char *msg) {
     mvprintw(INFO_MSG_Y, INFO_MSG_X + 2, msg);
 }
 
-Game::Game(WINDOW *map_win, Context *ctx): win(map_win), ctx(ctx) {
+Game::Game(WINDOW *map_win, WINDOW *score_win, Context *ctx): map_win(map_win), score_win(score_win), ctx(ctx) {
     prepared = true;
     playing = false;
     score = 0;
     show_info_msg("Are you ready?");
-    ctx->refresh(win);
+    ctx->refresh(map_win);
 }
 
 std::thread Game::create_input_loop() {
@@ -49,7 +52,7 @@ std::thread Game::create_input_loop() {
         std::string log_msg;
         while (!exit_flag && (ch = getch()) && ch != ERR) {
             log_msg = std::string("input captured - ");
-            log_msg += ch;
+            log_msg += std::to_string(ch);
             log("input thread", log_msg.c_str());
             ch = toupper(ch);
             switch (ch) {
@@ -96,8 +99,27 @@ std::thread Game::create_draw_loop() {
     return std::thread([&]() {
         while (playing) {
             ctx->get_snake()->move();
-            ctx->refresh(win);
+            ctx->refresh(map_win);
             std::this_thread::sleep_for(std::chrono::milliseconds(GAME_TICK));
+        }
+    });
+}
+
+std::thread Game::create_timer() {
+    using namespace std::chrono;
+
+    log("Game", "Create timer thread");
+    return std::thread([&]() {
+        double elapsed = 0;
+        auto start_time = system_clock::now().time_since_epoch();
+        while (playing) {
+            auto curr_time = system_clock::now().time_since_epoch();
+            elapsed = std::round(duration<double>(curr_time - start_time).count() * 100) / 100;
+            std::stringstream sstream;
+            sstream << std::fixed << std::setprecision(2) << elapsed;
+            mvwprintw(score_win, 6, 7, std::string(sstream.str()).c_str());
+            wrefresh(score_win);
+            std::this_thread::sleep_for(std::chrono::milliseconds(10));
         }
     });
 }
@@ -111,10 +133,12 @@ void Game::start() {
     playing = true;
     std::thread input = create_input_loop();
     std::thread tick = create_draw_loop();
+    std::thread timer = create_timer();
     log("Game", "Start game");
     show_info_msg("Game started");
     input.join();
     tick.join();
+    timer.join();
 }
 
 void Game::pause() {
@@ -142,12 +166,12 @@ void Game::reset() {
         return;
     }
 
-    ctx->reset(win);
+    ctx->reset(map_win);
     score = 0;
     prepared = true;
     log("Game", "Reset game");
     show_info_msg("Game reset");
-    ctx->refresh(win);
+    ctx->refresh(map_win);
 }
 
 void init();
@@ -161,7 +185,7 @@ int main() {
     init();
     WINDOW *map_window = init_window(MAP_WIN_WIDTH, MAP_WIN_HEIGHT, 5, 3);
     WINDOW *score_window = init_window(SCORE_WIN_WIDTH, SCORE_WIN_HEIGHT, 5, 50, true, 2);
-    WINDOW *mission_window = init_window(SCORE_WIN_WIDTH, SCORE_WIN_HEIGHT, 14, 50, true, 2);
+    WINDOW *mission_window = init_window(SCORE_WIN_WIDTH, SCORE_WIN_HEIGHT - 1, 14, 50, true, 2);
     WINDOW *help_window = init_window(HELP_WIN_WIDTH, HELP_WIN_HEIGHT, 29, 3, true, 2);
 
     //  print score board window texts
@@ -170,6 +194,7 @@ int main() {
     mvwprintw(score_window, 3, 4, "+: ");
     mvwprintw(score_window, 4, 4, "-: ");
     mvwprintw(score_window, 5, 4, "G: ");
+    mvwprintw(score_window, 6, 4, "T: 0.0");
     wrefresh(score_window);
     //  print mission window texts
     mvwprintw(mission_window, 0, 3, " Mission ");
@@ -188,7 +213,7 @@ int main() {
     wrefresh(help_window);
 
     Context ctx;
-    Game game(map_window, &ctx);
+    Game game(map_window, score_window, &ctx);
     int input;
 
     while ((input = getch()) && input != ERR) {

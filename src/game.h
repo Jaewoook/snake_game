@@ -10,15 +10,16 @@ class Game {
 
     private:
         bool prepared;
-        int score;
+        int score, level;
         std::atomic<bool> playing;
 
     public:
-        WINDOW *win;
+        WINDOW *map_win, *score_win;
         Context *ctx;
-        Game(WINDOW *map_win, Context *ctx);
+        Game(WINDOW *map_win, WINDOW *score_win, Context *ctx);
         std::thread create_draw_loop();
         std::thread create_input_loop();
+        std::thread create_timer();
         void start();
         void pause();
         void resume();
